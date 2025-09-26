@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cwpk4f7rtk6ck"]
+[gd_scene load_steps=6 format=3 uid="uid://cwpk4f7rtk6ck"]
 
 [ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://3dxk64deg3gr" path="res://scenes/camera_2d.gd" id="3_qhqgy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 27.0
@@ -29,3 +30,10 @@ offset = Vector2(616.4211, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 position = Vector2(0, -22)
 shape = SubResource("RectangleShape2D_g2els")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("3_qhqgy")
+
+[node name="AttackCooldown" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true

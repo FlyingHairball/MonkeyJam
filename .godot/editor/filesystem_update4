@@ -2,3 +2,6 @@ res://scenes/main_scene.tscn
 res://scenes/player.tscn
 res://scenes/player.gd
 res://scenes/global.gd
+res://scenes/attack.gd
+res://scenes/attack.tscn
+res://scenes/camera_2d.gd

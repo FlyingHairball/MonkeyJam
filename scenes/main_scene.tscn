@@ -5,22 +5,39 @@
 [ext_resource type="PackedScene" uid="uid://cwpk4f7rtk6ck" path="res://scenes/player.tscn" id="2_pw63i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ykc4"]
-size = Vector2(1291, 20)
+size = Vector2(1288.9336, 30)
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_w2twt")
 
-[node name="Walls" type="StaticBody2D" parent="."]
-
-[node name="Sprite2D" type="Sprite2D" parent="Walls"]
+[node name="BG" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(635.5, 709)
-scale = Vector2(10.1328125, 0.234375)
+position = Vector2(622.99994, 340.99997)
+scale = Vector2(11.015625, 11.015625)
 texture = ExtResource("2_7ykc4")
 
+[node name="Walls" type="StaticBody2D" parent="."]
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
-position = Vector2(635.5, 709)
+position = Vector2(1080, 695)
+scale = Vector2(1.670529, 1.516699)
 shape = SubResource("RectangleShape2D_7ykc4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/CollisionShape2D"]
+texture_filter = 1
+scale = Vector2(10.1328125, 0.23437501)
+texture = ExtResource("2_7ykc4")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+position = Vector2(1688, 287.9999)
+rotation = 1.5707964
+scale = Vector2(0.59763074, 2.4420927)
+shape = SubResource("RectangleShape2D_7ykc4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/CollisionShape2D2"]
+texture_filter = 1
+scale = Vector2(10.1328125, 0.23437501)
+texture = ExtResource("2_7ykc4")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
 position = Vector2(251, 315)
