@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwpk4f7rtk6ck"]
+
+[ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
+radius = 27.0
+height = 124.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(100, 96)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_3vyb7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_g2els")
+
+[node name="AttckGuide" type="Sprite2D" parent="."]
+scale = Vector2(0.296875, 0.296875)
+texture = ExtResource("1_3vyb7")
+offset = Vector2(616.4211, 0)
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(0, -22)
+shape = SubResource("RectangleShape2D_g2els")
