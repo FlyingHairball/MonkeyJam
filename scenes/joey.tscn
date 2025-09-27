@@ -1,0 +1,196 @@
+[gd_scene load_steps=8 format=3 uid="uid://cnjjsngdkmi5e"]
+
+[ext_resource type="Texture2D" uid="uid://cha2qyiy3kp68" path="res://assets/Joey_body.png" id="1_gadvm"]
+[ext_resource type="Script" uid="uid://du24i6f6namlp" path="res://scenes/joey.gd" id="1_n8i1g"]
+[ext_resource type="Texture2D" uid="uid://cqf3jslscgl2u" path="res://assets/Joey_face_gojo.png" id="2_01nrr"]
+[ext_resource type="Texture2D" uid="uid://cm8h7x4jg3nbn" path="res://assets/Joey_arm.png" id="3_01nrr"]
+
+[sub_resource type="Animation" id="Animation_n8i1g"]
+resource_name = "arm_animation"
+length = 0.200001
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("JoeyArm1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.060000006),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("JoeyArm2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.060000006, 0.15000002),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("JoeyArm1:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.060000006, 0.11000001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.4870205, 2.2689280275926285]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("JoeyArm1:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.060000006, 0.11000001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-219, 389), Vector2(-152.48, 36.58)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("JoeyArm2:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.727876, 0.9948376736367679]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("JoeyArm2:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(93, 411.795), Vector2(93, 85.195)]
+}
+
+[sub_resource type="Animation" id="Animation_01nrr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("JoeyArm1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("JoeyArm2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("JoeyArm1:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.4870205]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("JoeyArm1:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-219, 389)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("JoeyArm2:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.727876]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("JoeyArm2:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(93.000015, 384)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cxagq"]
+_data = {
+&"RESET": SubResource("Animation_01nrr"),
+&"arm_animation": SubResource("Animation_n8i1g")
+}
+
+[node name="Joey" type="Node2D"]
+script = ExtResource("1_n8i1g")
+
+[node name="Body" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("1_gadvm")
+
+[node name="Head" type="Sprite2D" parent="Body"]
+position = Vector2(0, -38.000004)
+scale = Vector2(0.06666664, 0.06666667)
+texture = ExtResource("2_01nrr")
+
+[node name="JoeyArm1" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-219, 389)
+rotation = 1.4870205
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("3_01nrr")
+flip_v = true
+
+[node name="JoeyArm2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(93.000015, 384)
+rotation = 1.727876
+texture = ExtResource("3_01nrr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_cxagq")
+}

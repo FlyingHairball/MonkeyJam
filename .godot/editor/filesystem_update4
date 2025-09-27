@@ -12,3 +12,13 @@ res://scenes/hp_bar.tscn
 res://scenes/slowmo_controller.tscn
 res://scenes/slowmo_controller.gd
 res://scenes/dummy.gd
+res://scenes/joey.tscn
+res://scenes/joey.gd
+res://assets/text_curve.gdshader
+res://assets/secret.gdshader
+res://scenes/audio_manager_global.tscn
+res://scenes/audio_manager_global.gd
+res://scenes/main_scene.gd
+res://assets/speed_lines.gdshader
+res://scenes/boss_joey.tscn
+res://scenes/boss_joey.gd

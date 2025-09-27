@@ -28,6 +28,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_e8frx")
 value = 50.0
 show_percentage = false
 script = ExtResource("1_e8frx")
+color = Color(0.17366049, 0.4140821, 0.18919456, 1)
 
 [node name="DamageBar" type="ProgressBar" parent="."]
 z_index = -1

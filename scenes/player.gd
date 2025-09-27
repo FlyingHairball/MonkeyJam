@@ -25,7 +25,12 @@ var recoil: Vector2 = Vector2.ZERO
 @onready var attack_area_collision_shape_2d: CollisionShape2D = $AttackArea/CollisionShape2D
 
 const ATTACK = preload("uid://b8om57bg2wadu")
+const JOEY = preload("uid://cnjjsngdkmi5e")
 @onready var attack_cooldown: Timer = $AttackCooldown
+@onready var joey_timer: Timer = $JoeyTimer
+var joey_mode = false
+var joey_pos = Vector2.ZERO
+@onready var joey_instance = JOEY.instantiate()
 
 @onready var hp_bar: ProgressBar = $Camera2D/Interface/InterfaceBG/HPBar
 @onready var skill_bar: ProgressBar = $Camera2D/Interface/InterfaceBG/SkillBar
@@ -40,6 +45,12 @@ const ATTACK = preload("uid://b8om57bg2wadu")
 
 var lerp_cam_pos_fator = 0.05
 
+var is_falling = false
+
+var time = 0
+var clicks_per_second = 0
+@onready var speed_lines: ColorRect = $Camera2D/SpeedLines
+@onready var sm = speed_lines.material as ShaderMaterial
 
 func _ready() -> void:
 	eyelid_sprite.visible = false
@@ -48,10 +59,18 @@ func _ready() -> void:
 	skill_bar.init_health(skill)
 	skill_bar.health = skill_charge
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	time += delta
+	if time >= 0.05 and clicks_per_second > 0:
+		clicks_per_second -= 1
+		time = 0
+	sm.set_shader_parameter("line_density", clicks_per_second / 30.0)
 	if not hyper_mode_active:
 		camera_2d.global_position.x = position.x
 		camera_2d.global_position.y = min(360.0, position.y)
+	elif joey_mode:
+		camera_2d.global_position.x = lerp(camera_2d.global_position.x, joey_pos.x, lerp_cam_pos_fator)
+		camera_2d.global_position.y = lerp(camera_2d.global_position.y, joey_pos.y, lerp_cam_pos_fator)
 	else:
 		camera_2d.global_position.x = lerp(camera_2d.global_position.x, position.x + ((enemy_pos.x - position.x) / 2), lerp_cam_pos_fator)
 		camera_2d.global_position.y = lerp(camera_2d.global_position.y, position.y, lerp_cam_pos_fator)
@@ -63,6 +82,10 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 	elif is_on_floor() and !recoil:
 		velocity = Vector2.ZERO
+	
+	if not is_falling and global_position.y > 800:
+		is_falling = true
+		AudioManager.play_audio("HOLE_FALL", camera_2d)
 	
 	if (Input.is_action_just_pressed("switch_skill") or Input.is_action_just_pressed("con_switch_skill")):
 		selected_skill += 1
@@ -95,7 +118,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	recoil = recoil.move_toward(Vector2.ZERO, RECOIL_DECAY * delta)
 	
-	if skill_active:
+	if skill_active or hyper_mode_active:
 		interface_face_angry_sprite.visible = true
 		eyelid_sprite.visible = true
 	else:
@@ -109,6 +132,11 @@ func _physics_process(delta: float) -> void:
 
 func attack() -> void:
 	spawn_punch()
+	clicks_per_second += 1
+	if hyper_mode_active:
+		AudioManager.play_audio("OGA_" + str(randi_range(1,3)), self)
+	else:
+		AudioManager.play_audio("PUNCH_" + str(randi_range(1,4)), self)
 	if hyper_mode_active:
 		spawn_punch()
 		spawn_punch()
@@ -126,13 +154,6 @@ func spawn_punch():
 	attack_instance.parent_context = self
 	attck_guide.add_child(attack_instance)
 
-#func apply_recoil(recoil_by: float = 0.15):
-	#var aim_dir := Vector2.from_angle(get_angle() or 0)
-	##print(aim_dir, rotation)
-	#recoil += (-aim_dir * RECOIL_STRENGTH)
-	#recoil = recoil.limit_length(RECOIL_MAX)
-	#camera_2d.shake(recoil_by)
-	#charge_skill()
 func apply_recoil(cam_kick: float = 0.15) -> void:
 	var dir := Vector2.from_angle(get_angle())
 	recoil += -dir * RECOIL_STRENGTH
@@ -141,7 +162,7 @@ func apply_recoil(cam_kick: float = 0.15) -> void:
 	charge_skill()
 
 func charge_skill():
-	if not skill_active:
+	if not skill_active and not hyper_mode_active:
 		skill_charge = min(skill, skill_charge + skilling)
 		skill_bar.health = skill_charge
 		if skill_charge == skill:
@@ -156,31 +177,53 @@ func take_damage(damage:int = 50):
 		invincibility_timer.start()
 
 func critical_hit(_enemy_pos):
-	if skill_active and slowmo_timer.is_stopped():
+	if skill_active and slowmo_timer.is_stopped() and not hyper_mode_active:
 		print("entering slow mo")
+		clicks_per_second += 10
 		enemy_pos = _enemy_pos
 		hyper_mode_active = true
-		attack_area_collision_shape_2d.scale = attack_area_collision_shape_2d.scale * 2
+		attack_area_collision_shape_2d.scale = Vector2(2.0, 2.0)
 		slowmo_timer.start()
 		slowmo_controller.start_slowmo()
 		#todo tween var
 		tween_zoom(Vector2(1.5, 1.5))
 
 func _on_slowmo_timer_timeout() -> void:
+	if skills[selected_skill] == "Joey":
+		spawn_joey()
+	else:
+		end_slowmo()
+
+func spawn_joey():
+	if not joey_instance:
+		joey_instance = JOEY.instantiate()
+	joey_mode = true
+	var dir = 1.0 if enemy_pos.x - position.x else -1.0
+	joey_instance.position = Vector2((800.0 * dir), 0)
+	print("joey global position: ", joey_pos)
+	add_child(joey_instance)
+	joey_pos = joey_instance.global_position
+	joey_instance.animate()
+	await get_tree().create_timer(1).timeout
+	joey_instance.queue_free()
+
+func end_slowmo():
 	print("exiting slowmo")
 	tween_zoom(Vector2(1, 1))
 	slowmo_controller.stop_slowmo()
+	slowmo_timer.wait_time = 1.0
 	skill_charge = 0
 	skill_bar.health = skill_charge
-	await get_tree().create_timer(1).timeout
-	attack_area_collision_shape_2d.scale = attack_area_collision_shape_2d.scale / 2
 	skill_active = false
+	await get_tree().create_timer(1).timeout
+	attack_area_collision_shape_2d.scale = Vector2(1.0, 1.0)
 	hyper_mode_active = false
+	joey_mode = false
 
-func tween_zoom(zoom_val: Vector2, time: float = 0.5):
+func tween_zoom(zoom_val: Vector2, tween_time: float = 0.5):
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(camera_2d, "zoom", zoom_val, time)
+	tween.tween_property(camera_2d, "zoom", zoom_val, tween_time)
 
 func random_point_in_area() -> Vector2:
 	var rect = attack_area_collision_shape_2d.shape

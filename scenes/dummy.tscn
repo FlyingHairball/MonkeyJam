@@ -1,23 +1,24 @@
 [gd_scene load_steps=5 format=3 uid="uid://bk4c1e20sygbn"]
 
 [ext_resource type="Script" uid="uid://ca4sundqdb0r4" path="res://scenes/dummy.gd" id="1_k5f3b"]
-[ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="2_k5f3b"]
+[ext_resource type="Texture2D" uid="uid://shgvwf32cn23" path="res://assets/Enemy_Funko.png" id="2_6m2ry"]
 [ext_resource type="PackedScene" uid="uid://klkhuhsk6xgn" path="res://scenes/hp_bar.tscn" id="3_6m2ry"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k5f3b"]
-radius = 39.0
-height = 208.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6m2ry"]
+size = Vector2(106, 140)
 
 [node name="Dummy" type="CharacterBody2D"]
 script = ExtResource("1_k5f3b")
 metadata/_custom_type_script = "uid://dwbm62mlj8141"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.578125, 1.609375)
-texture = ExtResource("2_k5f3b")
+texture_filter = 1
+scale = Vector2(2.265, 2.265)
+texture = ExtResource("2_6m2ry")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_k5f3b")
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_6m2ry")
 
 [node name="HPBar" parent="." instance=ExtResource("3_6m2ry")]
 offset_left = -57.0

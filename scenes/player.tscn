@@ -1,6 +1,5 @@
-[gd_scene load_steps=17 format=3 uid="uid://cwpk4f7rtk6ck"]
+[gd_scene load_steps=20 format=3 uid="uid://cwpk4f7rtk6ck"]
 
-[ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d18ja3ft7b8wx" path="res://assets/player.png" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bl3ecc4ouca6w" path="res://assets/player_head2.png" id="3_fjrip"]
@@ -12,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bqkark7iana55" path="res://assets/player_UI_face.png" id="10_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://bmtqsd8gn7ejr" path="res://assets/player_UI_face_angry.png" id="11_3v2ag"]
 [ext_resource type="PackedScene" uid="uid://clp7igwk7kcud" path="res://scenes/slowmo_controller.tscn" id="11_d2wvv"]
+[ext_resource type="Shader" uid="uid://d0ss3lslc5frs" path="res://assets/speed_lines.gdshader" id="11_jej6c"]
 
 [sub_resource type="Environment" id="Environment_y4r1p"]
 background_mode = 3
@@ -27,6 +27,25 @@ size = Vector2(144, 142)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2wvv"]
 bg_color = Color(0.6666667, 0.050980393, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_f1ej7"]
+noise_type = 5
+frequency = 0.2
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oprun"]
+noise = SubResource("FastNoiseLite_f1ej7")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8ls1"]
+shader = ExtResource("11_jej6c")
+shader_parameter/noise = SubResource("NoiseTexture2D_oprun")
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_count = 0.5
+shader_parameter/line_density = 0.0
+shader_parameter/line_faloff = 0.25
+shader_parameter/mask_size = 0.1
+shader_parameter/mask_edge = 0.2830000134425
+shader_parameter/animation_speed = 200.0000094525
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_g2els")
@@ -62,7 +81,6 @@ shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="AttckGuide" type="Sprite2D" parent="."]
 scale = Vector2(0.296875, 0.296875)
-texture = ExtResource("1_3vyb7")
 offset = Vector2(616.4211, 0)
 
 [node name="AttackArea" type="Area2D" parent="."]
@@ -77,8 +95,6 @@ script = ExtResource("3_qhqgy")
 [node name="Interface" type="Control" parent="Camera2D"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="InterfaceBG" type="Sprite2D" parent="Camera2D/Interface"]
 texture_filter = 1
@@ -91,6 +107,8 @@ offset_left = -62.02529
 offset_top = -22.151892
 offset_right = 99.3671
 offset_bottom = -12.658209
+color = Color(0.6666667, 0.050980393, 0, 1)
+is_enemy = false
 
 [node name="SkillBar" parent="Camera2D/Interface/InterfaceBG" instance=ExtResource("8_smehm")]
 offset_left = -62.025295
@@ -99,6 +117,7 @@ offset_right = 25.94939
 offset_bottom = -0.6329026
 theme_override_styles/fill = SubResource("StyleBoxFlat_d2wvv")
 color = Color(0.7612836, 0.6806281, 0.10538719, 1)
+is_enemy = false
 
 [node name="InterfaceFaceSprite" type="Sprite2D" parent="Camera2D/Interface/InterfaceBG"]
 texture_filter = 1
@@ -115,6 +134,13 @@ offset_right = 130.50635
 offset_bottom = 27.43038
 text = "Nothing"
 
+[node name="SpeedLines" type="ColorRect" parent="Camera2D"]
+material = SubResource("ShaderMaterial_a8ls1")
+offset_left = -1155.5555
+offset_top = -650.0
+offset_right = 1155.5555
+offset_bottom = 650.0
+
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
@@ -127,5 +153,8 @@ one_shot = true
 
 [node name="SlowmoTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="JoeyTimer" type="Timer" parent="."]
+wait_time = 0.5
 
 [connection signal="timeout" from="SlowmoTimer" to="." method="_on_slowmo_timer_timeout"]
