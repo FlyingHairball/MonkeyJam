@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export var max_offset: Vector2 = Vector2(800, 600)
+@export var max_offset: Vector2 = Vector2(500, 100)
 @export var max_rotation: float = 0.06
 @export var decay: float = 2.5
 

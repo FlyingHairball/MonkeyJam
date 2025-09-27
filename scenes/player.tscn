@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://cwpk4f7rtk6ck"]
+[gd_scene load_steps=17 format=3 uid="uid://cwpk4f7rtk6ck"]
 
+[ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d18ja3ft7b8wx" path="res://assets/player.png" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bl3ecc4ouca6w" path="res://assets/player_head2.png" id="3_fjrip"]
@@ -50,6 +51,7 @@ texture = ExtResource("4_smehm")
 
 [node name="EyeSprite" type="Sprite2D" parent="BodySprite/HeadSprite/EyelidSprite"]
 self_modulate = Color(5.329863, 1.0000437, 1.0000437, 1)
+texture_filter = 1
 texture = ExtResource("5_ur7pv")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="BodySprite/HeadSprite/EyelidSprite/EyeSprite"]
@@ -60,6 +62,7 @@ shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="AttckGuide" type="Sprite2D" parent="."]
 scale = Vector2(0.296875, 0.296875)
+texture = ExtResource("1_3vyb7")
 offset = Vector2(616.4211, 0)
 
 [node name="AttackArea" type="Area2D" parent="."]
@@ -104,6 +107,13 @@ texture = ExtResource("10_d2wvv")
 
 [node name="InterfaceFaceAngrySprite" type="Sprite2D" parent="Camera2D/Interface/InterfaceBG/InterfaceFaceSprite"]
 texture = ExtResource("11_3v2ag")
+
+[node name="tempSkill" type="Label" parent="Camera2D/Interface/InterfaceBG"]
+offset_left = 90.50635
+offset_top = 4.43038
+offset_right = 130.50635
+offset_bottom = 27.43038
+text = "Nothing"
 
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 0.2

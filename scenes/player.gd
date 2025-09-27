@@ -3,10 +3,13 @@ extends CharacterBody2D
 @export var health = 300
 @export var skill = 100
 @export var skilling = 5
+var skills = ["Nothing", "Joey", "Garnt"]
+var selected_skill = 0
 var skill_charge = 0
 var skill_active = false
 var hyper_mode_active = false
 var enemy_pos = null
+var max_hyper_mode_extra_timer = 0.35
 
 const SPEED = 400.0
 const JUMP_VELOCITY = -600.0
@@ -37,6 +40,7 @@ const ATTACK = preload("uid://b8om57bg2wadu")
 
 var lerp_cam_pos_fator = 0.05
 
+
 func _ready() -> void:
 	eyelid_sprite.visible = false
 	interface_face_angry_sprite.visible = false
@@ -60,6 +64,12 @@ func _physics_process(delta: float) -> void:
 	elif is_on_floor() and !recoil:
 		velocity = Vector2.ZERO
 	
+	if (Input.is_action_just_pressed("switch_skill") or Input.is_action_just_pressed("con_switch_skill")):
+		selected_skill += 1
+		if selected_skill == len(skills):
+			selected_skill = 0
+		$Camera2D/Interface/InterfaceBG/tempSkill.text = skills[selected_skill]
+	
 	if (Input.is_action_just_pressed("jump") or
 	Input.is_action_just_pressed("jump2") or
 	Input.is_action_just_pressed("con_jump")) and is_on_floor():
@@ -77,7 +87,7 @@ func _physics_process(delta: float) -> void:
 		attck_guide.rotation = angle
 	
 	if (Input.is_action_just_pressed("attack") or
-	Input.is_action_just_pressed("con_attack")) and attack_cooldown.is_stopped():
+	Input.is_action_just_pressed("con_attack")) and (attack_cooldown.is_stopped() or hyper_mode_active):
 		attack_cooldown.start()
 		attack()
 	#if recoil:
@@ -98,25 +108,44 @@ func _physics_process(delta: float) -> void:
 		pass
 
 func attack() -> void:
+	spawn_punch()
+	if hyper_mode_active:
+		spawn_punch()
+		spawn_punch()
+		if max_hyper_mode_extra_timer > 0:
+			var time_left = slowmo_timer.time_left
+			max_hyper_mode_extra_timer -= 0.01
+			slowmo_timer.stop()
+			slowmo_timer.start(time_left + 0.01)
+
+func spawn_punch():
 	var init_pos = random_point_in_area()
 	var attack_instance = ATTACK.instantiate()
+	if hyper_mode_active : attack_instance.speed = 30000
 	attack_instance.init_pos = init_pos
 	attack_instance.parent_context = self
 	attck_guide.add_child(attack_instance)
 
-func apply_recoil(recoil_by: float = 0.15):
-	var aim_dir := Vector2.from_angle(get_angle() or 0)
-	#print(aim_dir, rotation)
-	recoil += (-aim_dir * RECOIL_STRENGTH)
+#func apply_recoil(recoil_by: float = 0.15):
+	#var aim_dir := Vector2.from_angle(get_angle() or 0)
+	##print(aim_dir, rotation)
+	#recoil += (-aim_dir * RECOIL_STRENGTH)
+	#recoil = recoil.limit_length(RECOIL_MAX)
+	#camera_2d.shake(recoil_by)
+	#charge_skill()
+func apply_recoil(cam_kick: float = 0.15) -> void:
+	var dir := Vector2.from_angle(get_angle())
+	recoil += -dir * RECOIL_STRENGTH
 	recoil = recoil.limit_length(RECOIL_MAX)
-	camera_2d.shake(recoil_by)
+	camera_2d.shake(cam_kick)
 	charge_skill()
 
 func charge_skill():
-	skill_charge = min(skill, skill_charge + skilling)
-	skill_bar.health = skill_charge
-	if skill_charge == skill:
-		skill_active = true
+	if not skill_active:
+		skill_charge = min(skill, skill_charge + skilling)
+		skill_bar.health = skill_charge
+		if skill_charge == skill:
+			skill_active = true
 
 func take_damage(damage:int = 50):
 	if invincibility_timer.is_stopped():
@@ -131,6 +160,7 @@ func critical_hit(_enemy_pos):
 		print("entering slow mo")
 		enemy_pos = _enemy_pos
 		hyper_mode_active = true
+		attack_area_collision_shape_2d.scale = attack_area_collision_shape_2d.scale * 2
 		slowmo_timer.start()
 		slowmo_controller.start_slowmo()
 		#todo tween var
@@ -142,6 +172,8 @@ func _on_slowmo_timer_timeout() -> void:
 	slowmo_controller.stop_slowmo()
 	skill_charge = 0
 	skill_bar.health = skill_charge
+	await get_tree().create_timer(1).timeout
+	attack_area_collision_shape_2d.scale = attack_area_collision_shape_2d.scale / 2
 	skill_active = false
 	hyper_mode_active = false
 
@@ -160,7 +192,7 @@ func get_angle(deadzone: float = 0.1):
 	var v = Input.get_vector("con_left", "con_right", "con_up", "con_down")
 	if Global.controller_active:
 		if v.length() > deadzone:
-			body_sprite.scale.x = -1.0 if v.x < 0.0 else 1.0
+			body_sprite.scale.x = (-1.0 * abs(body_sprite.scale.x)) if v.x < 0.0 else abs(body_sprite.scale.x)
 			return v.angle()
 	else:
 		body_sprite.scale.x = (-1.0 * abs(body_sprite.scale.x)) if get_global_mouse_position().x < global_position.x else abs(body_sprite.scale.x)

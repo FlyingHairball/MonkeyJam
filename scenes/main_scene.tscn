@@ -46,3 +46,4 @@ position = Vector2(251, 315)
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(863, 568)
 max_hp = 300
+min_hp = 1

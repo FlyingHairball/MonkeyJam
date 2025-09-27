@@ -1,6 +1,6 @@
 extends Sprite2D
 
-const SPEED = 5000.0
+@export var speed = 5000.0
 @export var init_pos = Vector2.ZERO
 @export var parent_context = CharacterBody2D
 
@@ -8,7 +8,7 @@ func _ready() -> void:
 	global_position = init_pos
 
 func _physics_process(delta: float) -> void:
-	position.x += SPEED * delta
+	position.x += speed * delta
 
 func _on_timeout_timeout() -> void:
 	queue_free()
