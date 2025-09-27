@@ -5,3 +5,10 @@ res://scenes/global.gd
 res://scenes/attack.gd
 res://scenes/attack.tscn
 res://scenes/camera_2d.gd
+res://scenes/enemy.gd
+res://scenes/dummy.tscn
+res://scenes/hp_bar.gd
+res://scenes/hp_bar.tscn
+res://scenes/slowmo_controller.tscn
+res://scenes/slowmo_controller.gd
+res://scenes/dummy.gd

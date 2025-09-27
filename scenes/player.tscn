@@ -1,39 +1,121 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwpk4f7rtk6ck"]
+[gd_scene load_steps=16 format=3 uid="uid://cwpk4f7rtk6ck"]
 
-[ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://d18ja3ft7b8wx" path="res://assets/player.png" id="2_dqkch"]
+[ext_resource type="Texture2D" uid="uid://bl3ecc4ouca6w" path="res://assets/player_head2.png" id="3_fjrip"]
 [ext_resource type="Script" uid="uid://3dxk64deg3gr" path="res://scenes/camera_2d.gd" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://bu2hsi5seckxu" path="res://assets/player_head2_angry.png" id="4_smehm"]
+[ext_resource type="Texture2D" uid="uid://v3soifkwc2lm" path="res://assets/player_head2_eye.png" id="5_ur7pv"]
+[ext_resource type="PackedScene" uid="uid://klkhuhsk6xgn" path="res://scenes/hp_bar.tscn" id="8_smehm"]
+[ext_resource type="Texture2D" uid="uid://cwyh6kh88gooc" path="res://assets/interface.png" id="8_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://bqkark7iana55" path="res://assets/player_UI_face.png" id="10_d2wvv"]
+[ext_resource type="Texture2D" uid="uid://bmtqsd8gn7ejr" path="res://assets/player_UI_face_angry.png" id="11_3v2ag"]
+[ext_resource type="PackedScene" uid="uid://clp7igwk7kcud" path="res://scenes/slowmo_controller.tscn" id="11_d2wvv"]
+
+[sub_resource type="Environment" id="Environment_y4r1p"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 2.74
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 27.0
 height = 124.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(100, 96)
+size = Vector2(144, 142)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2wvv"]
+bg_color = Color(0.6666667, 0.050980393, 0, 1)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_g2els")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_3vyb7")
+[node name="BodySprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(7.6293945e-06, 7.6293945e-06)
+scale = Vector2(1.9375, 1.9375)
+texture = ExtResource("2_dqkch")
+centered = false
+offset = Vector2(-43.354847, -32.000008)
+
+[node name="HeadSprite" type="Sprite2D" parent="BodySprite"]
+texture_filter = 1
+position = Vector2(0, -36.457)
+scale = Vector2(0.7580646, 0.7580646)
+texture = ExtResource("3_fjrip")
+
+[node name="EyelidSprite" type="Sprite2D" parent="BodySprite/HeadSprite"]
+texture_filter = 1
+texture = ExtResource("4_smehm")
+
+[node name="EyeSprite" type="Sprite2D" parent="BodySprite/HeadSprite/EyelidSprite"]
+self_modulate = Color(5.329863, 1.0000437, 1.0000437, 1)
+texture = ExtResource("5_ur7pv")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="BodySprite/HeadSprite/EyelidSprite/EyeSprite"]
+environment = SubResource("Environment_y4r1p")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="AttckGuide" type="Sprite2D" parent="."]
 scale = Vector2(0.296875, 0.296875)
-texture = ExtResource("1_3vyb7")
 offset = Vector2(616.4211, 0)
 
 [node name="AttackArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(0, -22)
+position = Vector2(0, -61)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("3_qhqgy")
 
+[node name="Interface" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="InterfaceBG" type="Sprite2D" parent="Camera2D/Interface"]
+texture_filter = 1
+position = Vector2(-383.00003, -268)
+scale = Vector2(1.58, 1.58)
+texture = ExtResource("8_ur7pv")
+
+[node name="HPBar" parent="Camera2D/Interface/InterfaceBG" instance=ExtResource("8_smehm")]
+offset_left = -62.02529
+offset_top = -22.151892
+offset_right = 99.3671
+offset_bottom = -12.658209
+
+[node name="SkillBar" parent="Camera2D/Interface/InterfaceBG" instance=ExtResource("8_smehm")]
+offset_left = -62.025295
+offset_top = -6.3291154
+offset_right = 25.94939
+offset_bottom = -0.6329026
+theme_override_styles/fill = SubResource("StyleBoxFlat_d2wvv")
+color = Color(0.7612836, 0.6806281, 0.10538719, 1)
+
+[node name="InterfaceFaceSprite" type="Sprite2D" parent="Camera2D/Interface/InterfaceBG"]
+texture_filter = 1
+position = Vector2(-112.0253, -22.1519)
+texture = ExtResource("10_d2wvv")
+
+[node name="InterfaceFaceAngrySprite" type="Sprite2D" parent="Camera2D/Interface/InterfaceBG/InterfaceFaceSprite"]
+texture = ExtResource("11_3v2ag")
+
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="InvincibilityTimer" type="Timer" parent="."]
+wait_time = 0.8
+one_shot = true
+
+[node name="SlowmoController" parent="." instance=ExtResource("11_d2wvv")]
+
+[node name="SlowmoTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="SlowmoTimer" to="." method="_on_slowmo_timer_timeout"]
