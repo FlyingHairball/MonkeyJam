@@ -21,7 +21,8 @@ var dead = false
 var death_rot = 0
 
 func _ready() -> void:
-	hp_bar.init_health(max_hp, min_hp)
+	#print("\nenemy max_hp: ", max_hp, min_hp)
+	
 	
 	_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	_noise.frequency = 4.0
@@ -45,11 +46,12 @@ func shake(kick: float = 0.4) -> void:
 
 func apply_damage():
 	#print(hp, max_hp)
-	hp = max(min_hp, hp - 20)
+	hp = max(0, hp - 20)
 	hp_bar.health = hp
 	if hp == 0:
 		dead = true
 		death_rot = randf_range(-1,1)
-		#collision_shape_2d.set_deferred("disabled", true)
+		#collision_shape_2d.set_deferred("light_", true)
+		#collision_shape_2d.set_visibility_layer_bit()
 		# play animation and die
 		pass

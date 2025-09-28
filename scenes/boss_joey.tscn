@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://3w28tsb1iaon"]
+[gd_scene load_steps=8 format=3 uid="uid://3w28tsb1iaon"]
 
 [ext_resource type="Script" uid="uid://d4jiskc11w1l8" path="res://scenes/boss_joey.gd" id="1_1v71j"]
 [ext_resource type="Texture2D" uid="uid://c2aw2kavxp68g" path="res://assets/Boss_Joey.png" id="2_6qsbj"]
@@ -7,6 +7,17 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t0fh4"]
 radius = 43.0
 height = 202.0
+
+[sub_resource type="Animation" id="Animation_6qsbj"]
+resource_name = "sword"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_licq7"]
+_data = {
+&"sword": SubResource("Animation_6qsbj")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6qsbj"]
+size = Vector2(136, 40)
 
 [node name="BossJoey" type="CharacterBody2D"]
 script = ExtResource("1_1v71j")
@@ -26,3 +37,16 @@ offset_top = -135.0
 offset_right = 615.65216
 offset_bottom = -87.17389
 scale = Vector2(0.23, 0.23)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_licq7")
+}
+
+[node name="HitArea" type="Area2D" parent="."]
+
+[node name="SwordCollision" type="CollisionShape2D" parent="HitArea"]
+shape = SubResource("RectangleShape2D_6qsbj")
+disabled = true
+
+[connection signal="body_entered" from="HitArea" to="." method="_on_hit_area_body_entered"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bhyfmonnqmeax"]
+[gd_scene load_steps=22 format=3 uid="uid://bhyfmonnqmeax"]
 
 [ext_resource type="Script" uid="uid://cqwc2lo2q4b3i" path="res://scenes/main_scene.gd" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="2_7ykc4"]
@@ -9,9 +9,11 @@
 [ext_resource type="Shader" uid="uid://ma8umuh5y6jp" path="res://assets/secret.gdshader" id="4_c1pb6"]
 [ext_resource type="Texture2D" uid="uid://b4hic1sjsj0uj" path="res://assets/FG_Tutorial_Floor.png" id="4_gubc5"]
 [ext_resource type="PackedScene" uid="uid://bk4c1e20sygbn" path="res://scenes/dummy.tscn" id="4_pu3yx"]
+[ext_resource type="Texture2D" uid="uid://3eqs8grcjvl2" path="res://assets/BG_Parallax.png" id="5_4w45t"]
 [ext_resource type="Texture2D" uid="uid://cbgnas7u3ybr2" path="res://assets/BG_Wall_of_Journalism.png" id="8_c1pb6"]
 [ext_resource type="Shader" uid="uid://yqldwn8uhnvh" path="res://assets/text_curve.gdshader" id="9_6wevv"]
 [ext_resource type="PackedScene" uid="uid://3w28tsb1iaon" path="res://scenes/boss_joey.tscn" id="12_mngbo"]
+[ext_resource type="PackedScene" uid="uid://cpkiadekilmre" path="res://scenes/text_box.tscn" id="14_r6p65"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wevv"]
 shader = ExtResource("4_c1pb6")
@@ -57,12 +59,27 @@ texture = ExtResource("2_7ykc4")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(5566, 0)
+
+[node name="BgParallax" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+texture_filter = 1
+position = Vector2(643.6001, 49)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("5_4w45t")
+
+[node name="BgParallax2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+texture_filter = 1
+position = Vector2(3426.5996, 49)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("5_4w45t")
+
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_mirroring = Vector2(7267, 0)
+motion_mirroring = Vector2(3191, 0)
 
 [node name="BgTutorial" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2(2105, -846.00006)
-scale = Vector2(17.058683, 13.65625)
+position = Vector2(1073, -4)
+scale = Vector2(7.4911966, 7.1473966)
 texture = ExtResource("3_rt2n2")
 
 [node name="ScreenText" type="Control" parent="."]
@@ -417,8 +434,20 @@ texture = ExtResource("3_gubc5")
 region_enabled = true
 region_rect = Rect2(0, 224, 426, 16)
 
+[node name="GreenFloor3" type="CollisionShape2D" parent="Walls"]
+position = Vector2(10827, 686)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor3"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
-position = Vector2(5363, 423)
+position = Vector2(10315, 590)
 
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(4536, 567)
@@ -428,4 +457,20 @@ max_hp = 300
 visible = false
 
 [node name="BossJoey" parent="." instance=ExtResource("12_mngbo")]
-position = Vector2(5694, 520)
+position = Vector2(10917, 551)
+
+[node name="JoeyTrigger" type="Marker2D" parent="."]
+position = Vector2(10349, 563)
+
+[node name="CameraPos" type="Marker2D" parent="."]
+position = Vector2(10613, 351)
+
+[node name="PlayerTextBox" parent="." instance=ExtResource("14_r6p65")]
+visible = false
+
+[node name="JoeyTextBox" parent="." instance=ExtResource("14_r6p65")]
+visible = false
+offset_left = 10766.0
+offset_top = 213.0
+offset_right = 11076.0
+offset_bottom = 352.0

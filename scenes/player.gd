@@ -50,7 +50,9 @@ var is_falling = false
 var time = 0
 var clicks_per_second = 0
 @onready var speed_lines: ColorRect = $Camera2D/SpeedLines
-@onready var sm = speed_lines.material as ShaderMaterial
+
+
+var player_disabled = false
 
 func _ready() -> void:
 	eyelid_sprite.visible = false
@@ -60,11 +62,17 @@ func _ready() -> void:
 	skill_bar.health = skill_charge
 
 func _process(delta: float) -> void:
+	if player_disabled:
+		return
+	
+	
 	time += delta
 	if time >= 0.05 and clicks_per_second > 0:
 		clicks_per_second -= 1
 		time = 0
-	sm.set_shader_parameter("line_density", clicks_per_second / 30.0)
+	speed_lines.material.set_shader_parameter("line_density", clicks_per_second / 30.0)
+	
+	
 	if not hyper_mode_active:
 		camera_2d.global_position.x = position.x
 		camera_2d.global_position.y = min(360.0, position.y)
@@ -76,6 +84,10 @@ func _process(delta: float) -> void:
 		camera_2d.global_position.y = lerp(camera_2d.global_position.y, position.y, lerp_cam_pos_fator)
 
 func _physics_process(delta: float) -> void:
+	if player_disabled:
+		return
+	
+	
 	if recoil and not hyper_mode_active:
 		velocity += recoil
 	if not is_on_floor():

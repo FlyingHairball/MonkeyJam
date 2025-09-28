@@ -19,7 +19,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		AudioManager.play_audio("SMASH_" + str(randi_range(1,3)), parent_context, 0.4)
 		queue_free()
 	if body.is_class("CharacterBody2D"):
-		#body.take_damage()
 		if body.has_method("apply_damage"):
 			body.apply_damage()
 			body.shake()
