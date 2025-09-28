@@ -221,6 +221,7 @@ rescue your pals to unlock Their Abilities"
 horizontal_alignment = 1
 
 [node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 3
 
 [node name="GreenFloor" type="CollisionShape2D" parent="Walls"]
 visible = false
@@ -447,7 +448,7 @@ region_enabled = true
 region_rect = Rect2(0, 224, 426, 16)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
-position = Vector2(10315, 590)
+position = Vector2(10158, 542)
 
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(4536, 567)
@@ -467,6 +468,10 @@ position = Vector2(10613, 351)
 
 [node name="PlayerTextBox" parent="." instance=ExtResource("14_r6p65")]
 visible = false
+offset_left = 10196.0
+offset_top = 213.0
+offset_right = 10506.0
+offset_bottom = 352.0
 
 [node name="JoeyTextBox" parent="." instance=ExtResource("14_r6p65")]
 visible = false

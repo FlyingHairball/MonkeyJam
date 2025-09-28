@@ -3,6 +3,21 @@
 [ext_resource type="Script" uid="uid://c3h4b84kcjcf6" path="res://scenes/text_box.gd" id="1_dyarx"]
 [ext_resource type="Theme" uid="uid://dvtdhns5wxpar" path="res://assets/TextPanel.tres" id="2_qdwih"]
 
+[sub_resource type="Animation" id="Animation_nq18v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:visible_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
 [sub_resource type="Animation" id="Animation_3ojeh"]
 resource_name = "animate_text"
 length = 0.50000334
@@ -19,21 +34,6 @@ tracks/0/keys = {
 "values": [0.0, 1.0]
 }
 
-[sub_resource type="Animation" id="Animation_nq18v"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Label:visible_ratio")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fm2t3"]
 _data = {
 &"RESET": SubResource("Animation_nq18v"),
@@ -47,12 +47,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 10182.0
-offset_top = 248.0
-offset_right = 10492.0
-offset_bottom = 387.0
+offset_left = -795.0
+offset_top = -430.0
+offset_right = -485.0
+offset_bottom = -291.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(155, 70)
 script = ExtResource("1_dyarx")
 
 [node name="Panel" type="Panel" parent="."]
@@ -83,6 +84,8 @@ theme_override_constants/shadow_outline_size = 25
 theme_override_font_sizes/font_size = 50
 text = "Joey! what are you doing in this jungle?"
 autowrap_mode = 2
+visible_characters = 0
+visible_ratio = 0.0
 
 [node name="InputPrompt" type="Label" parent="."]
 layout_mode = 1

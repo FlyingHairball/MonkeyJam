@@ -1,8 +1,9 @@
 extends CharacterBody2D
 class_name Enemy
 
+var colliding_obj = true
+
 @export var max_hp = 100
-@export var min_hp = 0
 @onready var hp = max_hp
 
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -21,9 +22,6 @@ var dead = false
 var death_rot = 0
 
 func _ready() -> void:
-	#print("\nenemy max_hp: ", max_hp, min_hp)
-	
-	
 	_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	_noise.frequency = 4.0
 
@@ -51,7 +49,6 @@ func apply_damage():
 	if hp == 0:
 		dead = true
 		death_rot = randf_range(-1,1)
-		#collision_shape_2d.set_deferred("light_", true)
-		#collision_shape_2d.set_visibility_layer_bit()
+		set_collision_layer_value(1, false)
 		# play animation and die
 		pass

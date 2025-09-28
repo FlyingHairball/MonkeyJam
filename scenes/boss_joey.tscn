@@ -1,8 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://3w28tsb1iaon"]
+[gd_scene load_steps=11 format=3 uid="uid://3w28tsb1iaon"]
 
 [ext_resource type="Script" uid="uid://d4jiskc11w1l8" path="res://scenes/boss_joey.gd" id="1_1v71j"]
 [ext_resource type="Texture2D" uid="uid://c2aw2kavxp68g" path="res://assets/Boss_Joey.png" id="2_6qsbj"]
+[ext_resource type="Texture2D" uid="uid://cvxawuvgxftkk" path="res://assets/boss_joey_domain.png" id="2_licq7"]
 [ext_resource type="PackedScene" uid="uid://klkhuhsk6xgn" path="res://scenes/hp_bar.tscn" id="3_licq7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6qsbj"]
+size = Vector2(136, 40)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t0fh4"]
+radius = 95.047356
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t0fh4"]
 radius = 43.0
@@ -16,12 +23,30 @@ _data = {
 &"sword": SubResource("Animation_6qsbj")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6qsbj"]
-size = Vector2(136, 40)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_licq7"]
+size = Vector2(624, 550)
 
 [node name="BossJoey" type="CharacterBody2D"]
+collision_layer = 3
+collision_mask = 2
 script = ExtResource("1_1v71j")
 max_hp = 1000
+
+[node name="HitArea" type="Area2D" parent="."]
+
+[node name="SwordCollision" type="CollisionShape2D" parent="HitArea"]
+shape = SubResource("RectangleShape2D_6qsbj")
+disabled = true
+
+[node name="DomainCollision" type="CollisionShape2D" parent="HitArea"]
+shape = SubResource("CircleShape2D_t0fh4")
+disabled = true
+
+[node name="Domain" type="Sprite2D" parent="HitArea/DomainCollision"]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 1
+scale = Vector2(3, 3)
+texture = ExtResource("2_licq7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -43,10 +68,32 @@ libraries = {
 &"": SubResource("AnimationLibrary_licq7")
 }
 
-[node name="HitArea" type="Area2D" parent="."]
+[node name="DomainTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
 
-[node name="SwordCollision" type="CollisionShape2D" parent="HitArea"]
-shape = SubResource("RectangleShape2D_6qsbj")
+[node name="InteractionArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea2D"]
+shape = SubResource("RectangleShape2D_licq7")
 disabled = true
 
+[node name="JoeyInteraction" type="Label" parent="."]
+visible = false
+offset_left = -221.0
+offset_top = -225.0
+offset_right = 570.0
+offset_bottom = -12.0
+scale = Vector2(0.555, 0.555)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "E to interact"
+horizontal_alignment = 1
+
 [connection signal="body_entered" from="HitArea" to="." method="_on_hit_area_body_entered"]
+[connection signal="timeout" from="DomainTimer" to="." method="_on_domain_timer_timeout"]
+[connection signal="body_entered" from="InteractionArea2D" to="." method="_on_interaction_area_2d_body_entered"]
+[connection signal="body_exited" from="InteractionArea2D" to="." method="_on_interaction_area_2d_body_exited"]
