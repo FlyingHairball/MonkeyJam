@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://3w28tsb1iaon"]
+[gd_scene load_steps=12 format=3 uid="uid://3w28tsb1iaon"]
 
 [ext_resource type="Script" uid="uid://d4jiskc11w1l8" path="res://scenes/boss_joey.gd" id="1_1v71j"]
 [ext_resource type="Texture2D" uid="uid://c2aw2kavxp68g" path="res://assets/Boss_Joey.png" id="2_6qsbj"]
 [ext_resource type="Texture2D" uid="uid://cvxawuvgxftkk" path="res://assets/boss_joey_domain.png" id="2_licq7"]
+[ext_resource type="Texture2D" uid="uid://cpqcttbecaft3" path="res://assets/Boss_Joey_dead.png" id="2_t0fh4"]
 [ext_resource type="PackedScene" uid="uid://klkhuhsk6xgn" path="res://scenes/hp_bar.tscn" id="3_licq7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6qsbj"]
@@ -31,6 +32,7 @@ collision_layer = 3
 collision_mask = 2
 script = ExtResource("1_1v71j")
 max_hp = 1000
+dead_texture = ExtResource("2_t0fh4")
 
 [node name="HitArea" type="Area2D" parent="."]
 

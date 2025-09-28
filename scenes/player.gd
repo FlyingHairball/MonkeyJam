@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var health = 300
 @export var skill = 100
 @export var skilling = 5
-var skills = ["Nothing", "Joey"]
+var skills = ["Nothing"]
 var selected_skill = 0
 var skill_charge = 0
 var skill_active = false

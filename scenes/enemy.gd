@@ -15,6 +15,8 @@ var colliding_obj = true
 @export var max_rotation: float = 0.06
 @export var decay: float = 2.5
 
+@export var dead_texture: Texture2D = null
+
 var trauma: float = 0.0
 var _time: float = 0.0
 var _noise := FastNoiseLite.new()
@@ -50,5 +52,7 @@ func apply_damage():
 		dead = true
 		death_rot = randf_range(-1,1)
 		set_collision_layer_value(1, false)
+		if dead_texture:
+			sprite_2d.texture = dead_texture
 		# play animation and die
 		pass

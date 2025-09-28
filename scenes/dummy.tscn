@@ -10,6 +10,7 @@ size = Vector2(106, 140)
 [node name="Dummy" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_k5f3b")
+dead_texture = ExtResource("2_6m2ry")
 metadata/_custom_type_script = "uid://dwbm62mlj8141"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bhyfmonnqmeax"]
+[gd_scene load_steps=36 format=3 uid="uid://bhyfmonnqmeax"]
 
 [ext_resource type="Script" uid="uid://cqwc2lo2q4b3i" path="res://scenes/main_scene.gd" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="2_7ykc4"]
@@ -6,14 +6,21 @@
 [ext_resource type="PackedScene" uid="uid://cwpk4f7rtk6ck" path="res://scenes/player.tscn" id="2_pw63i"]
 [ext_resource type="Texture2D" uid="uid://u71h0chqkqe1" path="res://assets/FG_Floor.png" id="3_gubc5"]
 [ext_resource type="Texture2D" uid="uid://gepty7psn7oo" path="res://assets/BG_Tutorial.png" id="3_rt2n2"]
+[ext_resource type="Texture2D" uid="uid://b7333qy7pdn7g" path="res://assets/BG_Parallax2.png" id="4_bcnxi"]
 [ext_resource type="Shader" uid="uid://ma8umuh5y6jp" path="res://assets/secret.gdshader" id="4_c1pb6"]
 [ext_resource type="Texture2D" uid="uid://b4hic1sjsj0uj" path="res://assets/FG_Tutorial_Floor.png" id="4_gubc5"]
 [ext_resource type="PackedScene" uid="uid://bk4c1e20sygbn" path="res://scenes/dummy.tscn" id="4_pu3yx"]
 [ext_resource type="Texture2D" uid="uid://3eqs8grcjvl2" path="res://assets/BG_Parallax.png" id="5_4w45t"]
 [ext_resource type="Texture2D" uid="uid://cbgnas7u3ybr2" path="res://assets/BG_Wall_of_Journalism.png" id="8_c1pb6"]
 [ext_resource type="Shader" uid="uid://yqldwn8uhnvh" path="res://assets/text_curve.gdshader" id="9_6wevv"]
+[ext_resource type="PackedScene" uid="uid://d0fp8fiigia1u" path="res://scenes/pete.tscn" id="11_01n6w"]
+[ext_resource type="Texture2D" uid="uid://08endq8bhbsl" path="res://assets/FG_floor2.png" id="12_7nt27"]
 [ext_resource type="PackedScene" uid="uid://3w28tsb1iaon" path="res://scenes/boss_joey.tscn" id="12_mngbo"]
+[ext_resource type="Texture2D" uid="uid://cpkssq1fa8vus" path="res://assets/FG_temple.png" id="13_7nt27"]
 [ext_resource type="PackedScene" uid="uid://cpkiadekilmre" path="res://scenes/text_box.tscn" id="14_r6p65"]
+[ext_resource type="PackedScene" uid="uid://br3t6shleqoff" path="res://scenes/orange.tscn" id="15_si52b"]
+[ext_resource type="Texture2D" uid="uid://cl1x71vbte0c7" path="res://assets/Enemy_Funko_dead.png" id="16_k6f3i"]
+[ext_resource type="Script" uid="uid://dg484iaceic77" path="res://scenes/credits_2.gd" id="21_xdqt8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wevv"]
 shader = ExtResource("4_c1pb6")
@@ -44,6 +51,60 @@ shader_parameter/wave_frequency = 140.0
 shader_parameter/movement_speed = 2.0
 shader_parameter/movement_amplitude = 5.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_si52b"]
+size = Vector2(933, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7nt27"]
+size = Vector2(133.56758, 41.052635)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_01n6w"]
+size = Vector2(173.33301, 183.33331)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_adb74"]
+shader = ExtResource("9_6wevv")
+shader_parameter/wave_amplitude = 30.0
+shader_parameter/wave_frequency = 35.0
+shader_parameter/movement_speed = 2.0
+shader_parameter/movement_amplitude = 5.0
+
+[sub_resource type="Animation" id="Animation_58gk3"]
+resource_name = "taunt"
+length = 3.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/wave_frequency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.9666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [35.0, 60.0]
+}
+
+[sub_resource type="Animation" id="Animation_to7gp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/wave_frequency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [35.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u0fll"]
+_data = {
+&"RESET": SubResource("Animation_to7gp"),
+&"taunt": SubResource("Animation_58gk3")
+}
+
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_w2twt")
 
@@ -58,6 +119,57 @@ scale = Vector2(11.015625, 11.015625)
 texture = ExtResource("2_7ykc4")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(5566, 0)
+
+[node name="BgParallax" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(643.6001, 49)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax2" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(3426.5996, 49)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax3" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(643.6001, -1519)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax4" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(3426.5996, -1519)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax5" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(643.6001, -3086)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax6" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(3426.5996, -3086)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax7" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(643.6001, -4653)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
+
+[node name="BgParallax8" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture_filter = 1
+position = Vector2(3426.5996, -4653)
+scale = Vector2(6.533333, 6.533333)
+texture = ExtResource("4_bcnxi")
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_mirroring = Vector2(5566, 0)
@@ -372,10 +484,10 @@ texture = ExtResource("8_c1pb6")
 
 [node name="WallOfJournalism" type="Label" parent="Walls/CollisionShape2D/BgWallOfJournalism"]
 material = SubResource("ShaderMaterial_e1cbu")
-offset_left = -42.333496
-offset_top = -32.666687
-offset_right = 404.6665
-offset_bottom = 36.333313
+offset_left = -41.999958
+offset_top = -58.666664
+offset_right = 405.00003
+offset_bottom = 320.2811
 scale = Vector2(0.19, 0.19)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -383,6 +495,8 @@ theme_override_constants/outline_size = 10
 theme_override_constants/shadow_outline_size = 25
 theme_override_font_sizes/font_size = 50
 text = "Wall Of Journalism"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="WallOfJournalism2" type="Label" parent="Walls/CollisionShape2D/BgWallOfJournalism"]
 offset_left = -20.0
@@ -447,12 +561,263 @@ texture = ExtResource("3_gubc5")
 region_enabled = true
 region_rect = Rect2(0, 224, 426, 16)
 
+[node name="GreenFloor4" type="CollisionShape2D" parent="Walls"]
+position = Vector2(12986, 686)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor4"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor5" type="CollisionShape2D" parent="Walls"]
+position = Vector2(14018, 597)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor5"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor6" type="CollisionShape2D" parent="Walls"]
+position = Vector2(13391, -1113)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor6"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor7" type="CollisionShape2D" parent="Walls"]
+position = Vector2(15044, -2041)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor7"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor8" type="CollisionShape2D" parent="Walls"]
+position = Vector2(15044, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor8"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="FgFloor" type="Sprite2D" parent="Walls"]
+texture_filter = 1
+position = Vector2(16090, -405)
+rotation = 1.5707964
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor10" type="CollisionShape2D" parent="Walls"]
+position = Vector2(16077, -1020)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor10"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor11" type="CollisionShape2D" parent="Walls"]
+position = Vector2(14001, -1597)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_si52b")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor11"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(2.189121, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor9" type="CollisionShape2D" parent="Walls"]
+position = Vector2(17124, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor9"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="GreenFloor12" type="CollisionShape2D" parent="Walls"]
+position = Vector2(19269, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/GreenFloor12"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("3_gubc5")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor13" type="CollisionShape2D" parent="Walls"]
+position = Vector2(21430, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor13"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor14" type="CollisionShape2D" parent="Walls"]
+position = Vector2(23570, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor14"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor15" type="CollisionShape2D" parent="Walls"]
+position = Vector2(25701, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor15"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor16" type="CollisionShape2D" parent="Walls"]
+position = Vector2(27850, 670)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor16"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls"]
+texture_filter = 1
+position = Vector2(25894.998, -1595)
+scale = Vector2(19.316666, 19.316668)
+texture = ExtResource("13_7nt27")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+position = Vector2(24769.998, 288)
+scale = Vector2(19.316666, 19.316668)
+shape = SubResource("RectangleShape2D_7nt27")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls"]
+position = Vector2(25464.998, -483.00003)
+scale = Vector2(19.316666, 19.316668)
+shape = SubResource("RectangleShape2D_7nt27")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Walls"]
+position = Vector2(26160.996, -1256)
+scale = Vector2(19.316666, 19.316668)
+shape = SubResource("RectangleShape2D_7nt27")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Walls"]
+position = Vector2(26855.996, -2029.0001)
+scale = Vector2(19.316666, 19.316668)
+shape = SubResource("RectangleShape2D_7nt27")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Walls"]
+position = Vector2(29434.998, -2029)
+scale = Vector2(19.316666, 19.316668)
+shape = SubResource("RectangleShape2D_7nt27")
+
+[node name="BrownFloor17" type="CollisionShape2D" parent="Walls"]
+position = Vector2(21265, -14969)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor17"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor18" type="CollisionShape2D" parent="Walls"]
+position = Vector2(21262, -17038)
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor18"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor19" type="CollisionShape2D" parent="Walls"]
+position = Vector2(20216, -16016)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor19"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
+[node name="BrownFloor20" type="CollisionShape2D" parent="Walls"]
+position = Vector2(22285, -16016)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_rt2n2")
+
+[node name="FgFloor" type="Sprite2D" parent="Walls/BrownFloor20"]
+texture_filter = 1
+position = Vector2(0, -13)
+scale = Vector2(5.0751176, 5.9083333)
+texture = ExtResource("12_7nt27")
+region_enabled = true
+region_rect = Rect2(0, 224, 426, 16)
+
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
-position = Vector2(4276, 531)
+position = Vector2(26, 249)
 
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(4536, 567)
 max_hp = 300
+dead_texture = ExtResource("16_k6f3i")
 
 [node name="MainScreen" type="Node2D" parent="."]
 visible = false
@@ -479,3 +844,94 @@ offset_left = 10766.0
 offset_top = 213.0
 offset_right = 11076.0
 offset_bottom = 352.0
+
+[node name="Orange" parent="." instance=ExtResource("15_si52b")]
+position = Vector2(16307, 536)
+
+[node name="Pete" parent="." instance=ExtResource("11_01n6w")]
+position = Vector2(18971, 534)
+
+[node name="PeteArea" type="Area2D" parent="Pete"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pete/PeteArea"]
+shape = SubResource("RectangleShape2D_01n6w")
+
+[node name="PeteTextBox" parent="." instance=ExtResource("14_r6p65")]
+visible = false
+offset_left = 10766.0
+offset_top = 213.0
+offset_right = 11076.0
+offset_bottom = 352.0
+
+[node name="EndMarker2D" type="Marker2D" parent="."]
+position = Vector2(28153, -2488)
+
+[node name="CreditsMarker" type="Marker2D" parent="."]
+position = Vector2(20965, -15297)
+
+[node name="Orange2" parent="." instance=ExtResource("15_si52b")]
+position = Vector2(20402, -15085)
+
+[node name="Dummy2" parent="." instance=ExtResource("4_pu3yx")]
+position = Vector2(22100, -15097)
+dead_texture = ExtResource("16_k6f3i")
+
+[node name="Credits" type="Label" parent="."]
+material = SubResource("ShaderMaterial_e1cbu")
+offset_left = 20346.0
+offset_top = -16134.0
+offset_right = 21189.0
+offset_bottom = -15531.0
+scale = Vector2(2.185, 2.185)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "The End...?
+For now
+
+Thank You For Playing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WallOfJournalism" type="Label" parent="."]
+material = SubResource("ShaderMaterial_e1cbu")
+offset_left = 14821.0
+offset_top = -2464.0
+offset_right = 15231.525
+offset_bottom = -2085.0522
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "Wow Duuude
+Ur soooo Cooool"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Credits2" type="Label" parent="."]
+material = SubResource("ShaderMaterial_adb74")
+offset_left = 20917.0
+offset_top = -15058.0
+offset_right = 21756.025
+offset_bottom = -14878.732
+scale = Vector2(0.82, 0.82)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "Made By PolkaBot"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("21_xdqt8")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Credits2"]
+libraries = {
+&"": SubResource("AnimationLibrary_u0fll")
+}
+
+[connection signal="body_entered" from="Pete/PeteArea" to="." method="_on_pete_area_body_entered"]
+[connection signal="body_exited" from="Pete/PeteArea" to="." method="_on_pete_area_body_exited"]

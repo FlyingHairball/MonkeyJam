@@ -19,3 +19,8 @@ res://scenes/player.tscn
 res://scenes/player.gd
 res://scenes/audio_manager_global.gd
 res://scenes/joey.tscn
+res://scenes/orange.gd
+res://scenes/orange.tscn
+res://scenes/pete.tscn
+res://scenes/hp_bar.gd
+res://scenes/credits_2.gd
