@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var health = 300
 @export var skill = 100
 @export var skilling = 5
-var skills = ["Nothing"]
+var skills = ["Nothing", "Joey"]
 var selected_skill = 0
 var skill_charge = 0
 var skill_active = false
@@ -146,7 +146,7 @@ func attack() -> void:
 	spawn_punch()
 	clicks_per_second += 1
 	if hyper_mode_active:
-		AudioManager.play_audio("OGA_" + str(randi_range(1,3)), self)
+		AudioManager.play_audio("OGA_" + str(randi_range(3,5)), self)
 	else:
 		AudioManager.play_audio("PUNCH_" + str(randi_range(1,4)), self)
 	if hyper_mode_active:
@@ -210,13 +210,22 @@ func spawn_joey():
 	if not joey_instance:
 		joey_instance = JOEY.instantiate()
 	joey_mode = true
-	var dir = 1.0 if enemy_pos.x - position.x else -1.0
+	var dir = 1.0 if (enemy_pos.x - global_position.x) > 0 else -1.0
+	print(
+		"\n dir: ", dir,
+		"\n enemy_pos.x: ", enemy_pos.x,
+		"\n global_position.x: ", global_position.x,
+		"\n (enemy_pos.x - global_position.x): ", global_position.x,
+		)
 	joey_instance.position = Vector2((800.0 * dir), 0)
 	print("joey global position: ", joey_pos)
 	add_child(joey_instance)
 	joey_pos = joey_instance.global_position
 	joey_instance.animate()
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.17).timeout
+	end_slowmo()
+	joey_mode = false
+	await get_tree().create_timer(0.03).timeout
 	joey_instance.queue_free()
 
 func end_slowmo():

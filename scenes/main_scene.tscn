@@ -182,7 +182,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_constants/shadow_outline_size = 25
 theme_override_font_sizes/font_size = 50
-text = "Kill The Funko Pop!"
+text = "Beat The Funko Pop!"
 horizontal_alignment = 1
 
 [node name="Ability1" type="Label" parent="ScreenText"]
@@ -448,7 +448,7 @@ region_enabled = true
 region_rect = Rect2(0, 224, 426, 16)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
-position = Vector2(10158, 542)
+position = Vector2(4276, 531)
 
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(4536, 567)

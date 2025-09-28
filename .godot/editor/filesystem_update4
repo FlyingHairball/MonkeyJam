@@ -17,3 +17,5 @@ res://scenes/main_scene.gd
 res://scenes/text_box.tscn
 res://scenes/player.tscn
 res://scenes/player.gd
+res://scenes/audio_manager_global.gd
+res://scenes/joey.tscn
