@@ -20,7 +20,6 @@ const MANGA = preload("uid://d1rrso4wiig20")
 func _set_disabled(new_value):
 	disabled = new_value
 	#dead = true
-	print("disabled?")
 	if not disabled:
 		act()
 
@@ -58,13 +57,15 @@ func act():
 				await get_tree().create_timer(0.3).timeout
 				sword_collision.disabled = false
 				tween_sword(target_pos)
+				AudioManager.play_audio("BOSS_JOEY_SWORD_"  + str(Global.rng.randi_range(1,3)), self, "SFX", 1.0)
 			"manga":
 				air_time = true
 				tween_position(player_pos + Vector2(0, -900), 0.5).connect(spawn_mangas.bind(player_pos))
 			"jump":
 				domain_timer.start()
 				recur_tween(1)
-				pass
+				await get_tree().create_timer(domain_timer.wait_time / 2).timeout
+				AudioManager.play_audio("BOSS_JOEY_DOMAIN_1", self, "Voice", 1.0)
 
 func tween_angle(target_angle: int, tween_time: float = 0.2):
 	var tween = create_tween()
@@ -84,6 +85,8 @@ func tween_position(target_position: Vector2, tween_time: float = 0.2):
 	return tween.finished
 
 func spawn_mangas(player_pos):
+	if (Global.rng.randi() % 100) <= 30:
+		AudioManager.play_audio("BOSS_JOEY_MANGA_"  + str(Global.rng.randi_range(1,2)), self, "Voice", 1.0)
 	await get_tree().create_timer(0.3).timeout
 	spawn_manga(player_pos + Vector2(0, -750))
 	spawn_manga(player_pos + Vector2(500, -750))
@@ -114,8 +117,8 @@ func tween_domain_scale(target_scale: Vector2, tween_time: float = 0.2):
 	return tween.finished
 
 func _on_domain_timer_timeout() -> void:
-	domain.modulate = Color("ffffff")
 	domain_collision.disabled = false
+	tween_domain_vis(true, 0.1)
 	tween_domain_scale(Vector2(4,4), 0.3).connect(domain_cooldown)
 
 func domain_cooldown():
@@ -136,7 +139,10 @@ func next_move():
 	# downtime and generate next move
 	await get_tree().create_timer(2).timeout
 	while current_move == previous_move:
-		current_move = randi_range(0,2)
+		current_move = Global.rng.randi_range(0,2)
+	# never domain expansion undergroundww
+	if global_position.y > 1000 and current_move == 2:
+		current_move = Global.rng.randi_range(0,1)
 	previous_move = current_move
 	act()
 

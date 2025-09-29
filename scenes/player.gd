@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@export var health = 300
+@export var max_health = 300
+var health = 300
 @export var skill = 100
 @export var skilling = 5
 var skills = ["Nothing"]
@@ -37,6 +38,8 @@ var joey_pos = Vector2.ZERO
 @onready var invincibility_timer: Timer = $InvincibilityTimer
 
 @onready var body_sprite: Sprite2D = $BodySprite
+@onready var head_sprite: Sprite2D = $BodySprite/HeadSprite
+@onready var head_dead_sprite: Sprite2D = $BodySprite/HeadDeadSprite
 @onready var eyelid_sprite: Sprite2D = $BodySprite/HeadSprite/EyelidSprite
 @onready var interface_face_angry_sprite: Sprite2D = $Camera2D/Interface/InterfaceBG/InterfaceFaceSprite/InterfaceFaceAngrySprite
 
@@ -51,15 +54,21 @@ var time = 0
 var clicks_per_second = 0
 @onready var speed_lines: ColorRect = $Camera2D/SpeedLines
 
-
 var player_disabled = false
+
+@onready var menu: Panel = $Camera2D/Interface/Menu
+@onready var settings_panel: Panel = $Camera2D/Interface/SettingsPanel
+
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 
 func _ready() -> void:
 	eyelid_sprite.visible = false
 	interface_face_angry_sprite.visible = false
-	hp_bar.init_health(health)
+	hp_bar.init_health(max_health)
 	skill_bar.init_health(skill)
 	skill_bar.health = skill_charge
+	menu.visible = false
 
 func _process(delta: float) -> void:
 	if player_disabled:
@@ -84,9 +93,14 @@ func _process(delta: float) -> void:
 		camera_2d.global_position.y = lerp(camera_2d.global_position.y, position.y, lerp_cam_pos_fator)
 
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("escape"):
+		if settings_panel.visible:
+			settings_panel.visible = false
+		else:
+			menu.visible = not menu.visible
+	
 	if player_disabled:
 		return
-	
 	
 	if recoil and not hyper_mode_active:
 		velocity += recoil
@@ -97,7 +111,10 @@ func _physics_process(delta: float) -> void:
 	
 	if not is_falling and global_position.y > 800:
 		is_falling = true
-		AudioManager.play_audio("HOLE_FALL", camera_2d)
+		AudioManager.play_audio("HOLE_FALL", camera_2d, "SFX")
+		await get_tree().create_timer(63).timeout
+		menu.visible = true
+		
 	
 	if (Input.is_action_just_pressed("switch_skill") or Input.is_action_just_pressed("con_switch_skill")):
 		selected_skill += 1
@@ -136,19 +153,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		interface_face_angry_sprite.visible = false
 		eyelid_sprite.visible = false
-	
-	if health == 0:
-		#trigger death screen
-		# stop input/movement
-		pass
 
 func attack() -> void:
 	spawn_punch()
 	clicks_per_second += 1
 	if hyper_mode_active:
-		AudioManager.play_audio("OGA_" + str(randi_range(3,5)), self)
+		AudioManager.play_audio("OGA_" + str(Global.rng.randi_range(3,5)), self, "SFX")
 	else:
-		AudioManager.play_audio("PUNCH_" + str(randi_range(1,4)), self)
+		AudioManager.play_audio("PUNCH_" + str(Global.rng.randi_range(1,4)), self, "SFX")
 	if hyper_mode_active:
 		spawn_punch()
 		spawn_punch()
@@ -182,11 +194,21 @@ func charge_skill():
 
 func take_damage(damage:int = 50):
 	if invincibility_timer.is_stopped():
-		print("damage taken")
-		health = max(0, health - damage)
-		hp_bar.health = health
+		update_health(max(0, health - damage))
+		AudioManager.play_audio("PAIN_" + str(Global.rng.randi_range(1,3)), self, "SFX", 1.0)
+		animation_player.play("Damage")
 		camera_2d.shake(0.25)
 		invincibility_timer.start()
+		if health == 0 and not player_disabled:
+			player_disabled = true
+			menu.visible = true
+			head_sprite.visible = false
+			head_dead_sprite.visible = true
+			body_sprite.rotation = deg_to_rad(90)
+
+func update_health(value):
+	health = value
+	hp_bar.health = health
 
 func critical_hit(_enemy_pos):
 	if skill_active and slowmo_timer.is_stopped() and not hyper_mode_active:
@@ -197,7 +219,6 @@ func critical_hit(_enemy_pos):
 		attack_area_collision_shape_2d.scale = Vector2(2.0, 2.0)
 		slowmo_timer.start()
 		slowmo_controller.start_slowmo()
-		#todo tween var
 		tween_zoom(Vector2(1.5, 1.5))
 
 func _on_slowmo_timer_timeout() -> void:
@@ -249,7 +270,7 @@ func tween_zoom(zoom_val: Vector2, tween_time: float = 0.5):
 func random_point_in_area() -> Vector2:
 	var rect = attack_area_collision_shape_2d.shape
 	var e = rect.extents
-	var p_local = Vector2(randf_range(-e.x, e.x), randf_range(-e.y, e.y))
+	var p_local = Vector2(Global.rng.randf_range(-e.x, e.x), Global.rng.randf_range(-e.y, e.y))
 	return attack_area_collision_shape_2d.to_global(p_local)
 
 func get_angle(deadzone: float = 0.1):
@@ -261,3 +282,29 @@ func get_angle(deadzone: float = 0.1):
 	else:
 		body_sprite.scale.x = (-1.0 * abs(body_sprite.scale.x)) if get_global_mouse_position().x < global_position.x else abs(body_sprite.scale.x)
 		return (get_global_mouse_position() - global_position).angle()
+
+
+func _on_menu_pressed() -> void:
+	menu.visible = true
+
+
+func _on_close_button_pressed() -> void:
+	menu.visible = false
+
+
+func _on_checkpoint_button_pressed() -> void:
+	get_tree().reload_current_scene()
+
+
+func _on_main_menu_button_pressed() -> void:
+	Global.menu = true
+	get_tree().reload_current_scene()
+
+
+func _on_settings_button_pressed() -> void:
+	menu.visible = false
+	settings_panel.visible = true
+
+
+func _on_settings_close_button_pressed() -> void:
+	settings_panel.visible = false

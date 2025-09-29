@@ -29,6 +29,8 @@ window/stretch/mode="canvas_items"
 [global_group]
 
 player=""
+camera=""
+settings=""
 
 [input]
 
@@ -131,6 +133,7 @@ con_switch_skill={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 viewport/hdr_2d=true
 occlusion_culling/use_occlusion_culling=true
 viewport/default_gravity=1225.0

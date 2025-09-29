@@ -1,17 +1,20 @@
-[gd_scene load_steps=20 format=3 uid="uid://cwpk4f7rtk6ck"]
+[gd_scene load_steps=26 format=3 uid="uid://cwpk4f7rtk6ck"]
 
 [ext_resource type="Script" uid="uid://dxpnhr55yo3qj" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d18ja3ft7b8wx" path="res://assets/player.png" id="2_dqkch"]
-[ext_resource type="Texture2D" uid="uid://bl3ecc4ouca6w" path="res://assets/player_head2.png" id="3_fjrip"]
+[ext_resource type="Texture2D" uid="uid://d3j84r7xw5ind" path="res://assets/player_head3.png" id="3_f1ej7"]
 [ext_resource type="Script" uid="uid://3dxk64deg3gr" path="res://scenes/camera_2d.gd" id="3_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://bu2hsi5seckxu" path="res://assets/player_head2_angry.png" id="4_smehm"]
-[ext_resource type="Texture2D" uid="uid://v3soifkwc2lm" path="res://assets/player_head2_eye.png" id="5_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://c617acf7801mv" path="res://assets/player_head3_angry.png" id="4_oprun"]
+[ext_resource type="Texture2D" uid="uid://8elt1sfl6e53" path="res://assets/player_head3_angry_eye.png" id="5_a8ls1"]
+[ext_resource type="Texture2D" uid="uid://n26evi0uihnm" path="res://assets/player_head3_dead.png" id="6_oprun"]
 [ext_resource type="PackedScene" uid="uid://klkhuhsk6xgn" path="res://scenes/hp_bar.tscn" id="8_smehm"]
 [ext_resource type="Texture2D" uid="uid://cwyh6kh88gooc" path="res://assets/interface.png" id="8_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://bqkark7iana55" path="res://assets/player_UI_face.png" id="10_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://bmtqsd8gn7ejr" path="res://assets/player_UI_face_angry.png" id="11_3v2ag"]
 [ext_resource type="PackedScene" uid="uid://clp7igwk7kcud" path="res://scenes/slowmo_controller.tscn" id="11_d2wvv"]
 [ext_resource type="Shader" uid="uid://d0ss3lslc5frs" path="res://assets/speed_lines.gdshader" id="11_jej6c"]
+[ext_resource type="Texture2D" uid="uid://cbso274kldsgo" path="res://assets/wheel.png" id="12_f1ej7"]
+[ext_resource type="Script" uid="uid://h2av2u38atne" path="res://scenes/settings_panel.gd" id="13_f1ej7"]
 
 [sub_resource type="Environment" id="Environment_y4r1p"]
 background_mode = 3
@@ -24,9 +27,6 @@ height = 124.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(144, 142)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2wvv"]
-bg_color = Color(0.6666667, 0.050980393, 0, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f1ej7"]
 noise_type = 5
@@ -47,6 +47,46 @@ shader_parameter/mask_size = 0.1
 shader_parameter/mask_edge = 0.2830000134425
 shader_parameter/animation_speed = 200.0000094525
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2wvv"]
+bg_color = Color(0.6666667, 0.050980393, 0, 1)
+
+[sub_resource type="Animation" id="Animation_jej6c"]
+resource_name = "Damage"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.29999995, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f1ej7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oprun"]
+_data = {
+&"Damage": SubResource("Animation_jej6c"),
+&"RESET": SubResource("Animation_f1ej7")
+}
+
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_g2els")
 
@@ -62,19 +102,26 @@ offset = Vector2(-43.354847, -32.000008)
 texture_filter = 1
 position = Vector2(0, -36.457)
 scale = Vector2(0.7580646, 0.7580646)
-texture = ExtResource("3_fjrip")
+texture = ExtResource("3_f1ej7")
 
 [node name="EyelidSprite" type="Sprite2D" parent="BodySprite/HeadSprite"]
 texture_filter = 1
-texture = ExtResource("4_smehm")
+texture = ExtResource("4_oprun")
 
 [node name="EyeSprite" type="Sprite2D" parent="BodySprite/HeadSprite/EyelidSprite"]
 self_modulate = Color(5.329863, 1.0000437, 1.0000437, 1)
 texture_filter = 1
-texture = ExtResource("5_ur7pv")
+texture = ExtResource("5_a8ls1")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="BodySprite/HeadSprite/EyelidSprite/EyeSprite"]
 environment = SubResource("Environment_y4r1p")
+
+[node name="HeadDeadSprite" type="Sprite2D" parent="BodySprite"]
+visible = false
+texture_filter = 1
+position = Vector2(0, -36.457)
+scale = Vector2(0.7580646, 0.7580646)
+texture = ExtResource("6_oprun")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_g2els")
@@ -89,10 +136,20 @@ offset = Vector2(616.4211, 0)
 position = Vector2(0, -61)
 shape = SubResource("RectangleShape2D_g2els")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
 script = ExtResource("3_qhqgy")
 
+[node name="SpeedLines" type="ColorRect" parent="Camera2D"]
+z_as_relative = false
+material = SubResource("ShaderMaterial_a8ls1")
+offset_left = -1155.5555
+offset_top = -650.0
+offset_right = 1155.5555
+offset_bottom = 650.0
+mouse_filter = 1
+
 [node name="Interface" type="Control" parent="Camera2D"]
+z_index = 1
 layout_mode = 3
 anchors_preset = 0
 
@@ -128,18 +185,189 @@ texture = ExtResource("10_d2wvv")
 texture = ExtResource("11_3v2ag")
 
 [node name="tempSkill" type="Label" parent="Camera2D/Interface/InterfaceBG"]
-offset_left = 90.50635
-offset_top = 4.43038
-offset_right = 130.50635
-offset_bottom = 27.43038
+offset_left = 44.936733
+offset_top = 1.2658231
+offset_right = 239.93674
+offset_bottom = 70.26582
+scale = Vector2(0.35, 0.35)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
 text = "Nothing"
 
-[node name="SpeedLines" type="ColorRect" parent="Camera2D"]
-material = SubResource("ShaderMaterial_a8ls1")
-offset_left = -1155.5555
-offset_top = -650.0
-offset_right = 1155.5555
-offset_bottom = 650.0
+[node name="MenuButton" type="Button" parent="Camera2D/Interface"]
+layout_mode = 0
+offset_left = 583.0
+offset_top = -341.0
+offset_right = 621.0
+offset_bottom = -305.0
+
+[node name="Wheel" type="Sprite2D" parent="Camera2D/Interface/MenuButton"]
+texture_filter = 1
+position = Vector2(19, 18)
+scale = Vector2(1.125, 1.125)
+texture = ExtResource("12_f1ej7")
+
+[node name="Menu" type="Panel" parent="Camera2D/Interface"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -225.0
+offset_top = -150.0
+offset_right = 225.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CheckpointButton" type="Button" parent="Camera2D/Interface/Menu"]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 82.0
+offset_right = 608.0
+offset_bottom = 159.0
+scale = Vector2(0.5, 0.5)
+theme_override_font_sizes/font_size = 50
+text = "Checkpoint"
+
+[node name="MainMenuButton" type="Button" parent="Camera2D/Interface/Menu"]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 129.0
+offset_right = 608.0
+offset_bottom = 206.0
+scale = Vector2(0.5, 0.5)
+theme_override_font_sizes/font_size = 50
+text = "Main Menu"
+
+[node name="SettingsButton" type="Button" parent="Camera2D/Interface/Menu"]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 179.0
+offset_right = 608.0
+offset_bottom = 256.0
+scale = Vector2(0.5, 0.5)
+theme_override_font_sizes/font_size = 50
+text = "Settings"
+
+[node name="CloseButton" type="Button" parent="Camera2D/Interface/Menu"]
+layout_mode = 0
+offset_left = 404.00003
+offset_top = 14.0
+offset_right = 484.00003
+offset_bottom = 91.0
+scale = Vector2(0.4, 0.4)
+theme_override_font_sizes/font_size = 50
+text = "X"
+
+[node name="SettingsPanel" type="Panel" parent="Camera2D/Interface" groups=["settings"]]
+visible = false
+z_index = 4
+layout_mode = 0
+offset_left = -225.0
+offset_top = -125.0
+offset_right = 225.0
+offset_bottom = 125.0
+pivot_offset = Vector2(225, 125)
+script = ExtResource("13_f1ej7")
+
+[node name="MarginContainer" type="MarginContainer" parent="Camera2D/Interface/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Camera2D/Interface/SettingsPanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MasterSlider" type="HBoxContainer" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MasterSlider"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "Master  "
+
+[node name="HSlider" type="HSlider" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MasterSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MusicSlider" type="HBoxContainer" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MusicSlider"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "\"Music\" "
+
+[node name="HSlider" type="HSlider" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MusicSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SFXSlider" type="HBoxContainer" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/SFXSlider"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "SFX         "
+
+[node name="HSlider" type="HSlider" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/SFXSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="VoiceSlider" type="HBoxContainer" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/VoiceSlider"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "Voice      "
+
+[node name="HSlider" type="HSlider" parent="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/VoiceSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SettingsCloseButton" type="Button" parent="Camera2D/Interface/SettingsPanel"]
+layout_mode = 0
+offset_left = 404.00003
+offset_top = 14.0
+offset_right = 484.00003
+offset_bottom = 91.0
+scale = Vector2(0.4, 0.4)
+theme_override_font_sizes/font_size = 50
+text = "X"
 
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 0.2
@@ -157,4 +385,19 @@ one_shot = true
 [node name="JoeyTimer" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_oprun")
+}
+
+[connection signal="pressed" from="Camera2D/Interface/MenuButton" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Camera2D/Interface/Menu/CheckpointButton" to="." method="_on_checkpoint_button_pressed"]
+[connection signal="pressed" from="Camera2D/Interface/Menu/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Camera2D/Interface/Menu/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Camera2D/Interface/Menu/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="value_changed" from="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MasterSlider/HSlider" to="Camera2D/Interface/SettingsPanel" method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/MusicSlider/HSlider" to="Camera2D/Interface/SettingsPanel" method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/SFXSlider/HSlider" to="Camera2D/Interface/SettingsPanel" method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="Camera2D/Interface/SettingsPanel/MarginContainer/VBoxContainer/VoiceSlider/HSlider" to="Camera2D/Interface/SettingsPanel" method="_on_voice_slider_value_changed"]
+[connection signal="pressed" from="Camera2D/Interface/SettingsPanel/SettingsCloseButton" to="." method="_on_settings_close_button_pressed"]
 [connection signal="timeout" from="SlowmoTimer" to="." method="_on_slowmo_timer_timeout"]

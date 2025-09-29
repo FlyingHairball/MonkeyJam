@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bhyfmonnqmeax"]
+[gd_scene load_steps=40 format=3 uid="uid://bhyfmonnqmeax"]
 
 [ext_resource type="Script" uid="uid://cqwc2lo2q4b3i" path="res://scenes/main_scene.gd" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://dn671x06goq6" path="res://assets/icon.svg" id="2_7ykc4"]
@@ -21,12 +21,20 @@
 [ext_resource type="PackedScene" uid="uid://br3t6shleqoff" path="res://scenes/orange.tscn" id="15_si52b"]
 [ext_resource type="Texture2D" uid="uid://cl1x71vbte0c7" path="res://assets/Enemy_Funko_dead.png" id="16_k6f3i"]
 [ext_resource type="Script" uid="uid://dg484iaceic77" path="res://scenes/credits_2.gd" id="21_xdqt8"]
+[ext_resource type="Texture2D" uid="uid://wi7ee4mji35h" path="res://assets/MonkeyMadnessMainMenu.png" id="22_adb74"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wevv"]
 shader = ExtResource("4_c1pb6")
 shader_parameter/wave_amplitude = -17.0
 shader_parameter/wave_frequency = 140.0
 shader_parameter/movement_speed = 0.5
+shader_parameter/movement_amplitude = 5.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e1cbu"]
+shader = ExtResource("9_6wevv")
+shader_parameter/wave_amplitude = 30.0
+shader_parameter/wave_frequency = 140.0
+shader_parameter/movement_speed = 2.0
 shader_parameter/movement_amplitude = 5.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rt2n2"]
@@ -44,13 +52,6 @@ size = Vector2(2767, 36)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c1pb6"]
 size = Vector2(270, 435)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e1cbu"]
-shader = ExtResource("9_6wevv")
-shader_parameter/wave_amplitude = 30.0
-shader_parameter/wave_frequency = 140.0
-shader_parameter/movement_speed = 2.0
-shader_parameter/movement_amplitude = 5.0
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_si52b"]
 size = Vector2(933, 68)
 
@@ -66,6 +67,21 @@ shader_parameter/wave_amplitude = 30.0
 shader_parameter/wave_frequency = 35.0
 shader_parameter/movement_speed = 2.0
 shader_parameter/movement_amplitude = 5.0
+
+[sub_resource type="Animation" id="Animation_to7gp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/wave_frequency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [35.0]
+}
 
 [sub_resource type="Animation" id="Animation_58gk3"]
 resource_name = "taunt"
@@ -84,25 +100,48 @@ tracks/0/keys = {
 "values": [35.0, 60.0]
 }
 
-[sub_resource type="Animation" id="Animation_to7gp"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u0fll"]
+_data = {
+&"RESET": SubResource("Animation_to7gp"),
+&"taunt": SubResource("Animation_58gk3")
+}
+
+[sub_resource type="Animation" id="Animation_u0fll"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:material:shader_parameter/wave_frequency")
+tracks/0/path = NodePath("FullScreen:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [35.0]
+"values": [Vector2(349, 574.00006)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_u0fll"]
+[sub_resource type="Animation" id="Animation_adb74"]
+resource_name = "shake"
+length = 0.7
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FullScreen:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(349, 574.00006), Vector2(333.955, 574)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6p3nn"]
 _data = {
-&"RESET": SubResource("Animation_to7gp"),
-&"taunt": SubResource("Animation_58gk3")
+&"RESET": SubResource("Animation_u0fll"),
+&"shake": SubResource("Animation_adb74")
 }
 
 [node name="MainScene" type="Node2D"]
@@ -331,6 +370,43 @@ text = "F - to Switch Abilities!
 
 rescue your pals to unlock Their Abilities"
 horizontal_alignment = 1
+
+[node name="Credits" type="Label" parent="ScreenText"]
+material = SubResource("ShaderMaterial_e1cbu")
+layout_mode = 0
+offset_left = 20346.0
+offset_top = -16134.0
+offset_right = 21189.0
+offset_bottom = -15531.0
+scale = Vector2(2.185, 2.185)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "The End...?
+For now
+
+Thank You For Playing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WallOfJournalism" type="Label" parent="ScreenText"]
+material = SubResource("ShaderMaterial_e1cbu")
+layout_mode = 0
+offset_left = 14821.0
+offset_top = -2464.0
+offset_right = 15231.525
+offset_bottom = -2085.0522
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "Wow Duuude
+Ur soooo Cooool"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Walls" type="StaticBody2D" parent="."]
 collision_layer = 3
@@ -812,15 +888,12 @@ region_enabled = true
 region_rect = Rect2(0, 224, 426, 16)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_pw63i")]
-position = Vector2(26, 249)
+position = Vector2(1, 265)
 
 [node name="Dummy" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(4536, 567)
 max_hp = 300
 dead_texture = ExtResource("16_k6f3i")
-
-[node name="MainScreen" type="Node2D" parent="."]
-visible = false
 
 [node name="BossJoey" parent="." instance=ExtResource("12_mngbo")]
 position = Vector2(10917, 551)
@@ -837,6 +910,8 @@ offset_left = 10196.0
 offset_top = 213.0
 offset_right = 10506.0
 offset_bottom = 352.0
+voice = "CDAWG_MUMBLE_"
+voice_lines_number = 3
 
 [node name="JoeyTextBox" parent="." instance=ExtResource("14_r6p65")]
 visible = false
@@ -844,6 +919,8 @@ offset_left = 10766.0
 offset_top = 213.0
 offset_right = 11076.0
 offset_bottom = 352.0
+voice = "JOEY_MUMBLE_"
+voice_lines_number = 2
 
 [node name="Orange" parent="." instance=ExtResource("15_si52b")]
 position = Vector2(16307, 536)
@@ -854,6 +931,7 @@ position = Vector2(18971, 534)
 [node name="PeteArea" type="Area2D" parent="Pete"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pete/PeteArea"]
+visible = false
 shape = SubResource("RectangleShape2D_01n6w")
 
 [node name="PeteTextBox" parent="." instance=ExtResource("14_r6p65")]
@@ -862,6 +940,8 @@ offset_left = 10766.0
 offset_top = 213.0
 offset_right = 11076.0
 offset_bottom = 352.0
+voice = "PETE_MUMBLE_"
+voice_lines_number = 5
 
 [node name="EndMarker2D" type="Marker2D" parent="."]
 position = Vector2(28153, -2488)
@@ -875,41 +955,6 @@ position = Vector2(20402, -15085)
 [node name="Dummy2" parent="." instance=ExtResource("4_pu3yx")]
 position = Vector2(22100, -15097)
 dead_texture = ExtResource("16_k6f3i")
-
-[node name="Credits" type="Label" parent="."]
-material = SubResource("ShaderMaterial_e1cbu")
-offset_left = 20346.0
-offset_top = -16134.0
-offset_right = 21189.0
-offset_bottom = -15531.0
-scale = Vector2(2.185, 2.185)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_constants/shadow_outline_size = 25
-theme_override_font_sizes/font_size = 50
-text = "The End...?
-For now
-
-Thank You For Playing"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="WallOfJournalism" type="Label" parent="."]
-material = SubResource("ShaderMaterial_e1cbu")
-offset_left = 14821.0
-offset_top = -2464.0
-offset_right = 15231.525
-offset_bottom = -2085.0522
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_constants/shadow_outline_size = 25
-theme_override_font_sizes/font_size = 50
-text = "Wow Duuude
-Ur soooo Cooool"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Credits2" type="Label" parent="."]
 material = SubResource("ShaderMaterial_adb74")
@@ -933,5 +978,79 @@ libraries = {
 &"": SubResource("AnimationLibrary_u0fll")
 }
 
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Checkpoint1" type="Marker2D" parent="Checkpoints"]
+position = Vector2(6628, 489)
+
+[node name="Checkpoint2" type="Marker2D" parent="Checkpoints"]
+position = Vector2(15049, 470)
+
+[node name="MainScreen" type="Control" parent="."]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = -26.0
+offset_top = 16.0
+offset_right = 14.0
+offset_bottom = 56.0
+
+[node name="Sprite2D" type="Sprite2D" parent="MainScreen"]
+texture_filter = 1
+position = Vector2(27, 249)
+texture = ExtResource("22_adb74")
+
+[node name="ContinueButton" type="Button" parent="MainScreen/Sprite2D"]
+offset_left = -120.0
+offset_top = 198.0
+offset_right = 390.0
+offset_bottom = 275.0
+scale = Vector2(0.375, 0.375)
+theme_override_font_sizes/font_size = 50
+text = "Continue"
+
+[node name="NewGameButton" type="Button" parent="MainScreen/Sprite2D"]
+offset_left = -120.0
+offset_top = 236.99998
+offset_right = 390.0
+offset_bottom = 314.0
+scale = Vector2(0.375, 0.375)
+theme_override_font_sizes/font_size = 50
+text = "New Game"
+
+[node name="SettingsButton" type="Button" parent="MainScreen/Sprite2D"]
+offset_left = -120.0
+offset_top = 275.0
+offset_right = 390.0
+offset_bottom = 352.0
+scale = Vector2(0.375, 0.375)
+theme_override_font_sizes/font_size = 50
+text = "Settings"
+
+[node name="FullScreen" type="Label" parent="MainScreen"]
+layout_mode = 0
+offset_left = 349.0
+offset_top = 574.00006
+offset_right = 1139.9866
+offset_bottom = 672.2851
+scale = Vector2(0.35, 0.35)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7490196)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "Fullscreen Recommended -->"
+horizontal_alignment = 1
+
+[node name="FullscreenAnimationPlayer" type="AnimationPlayer" parent="MainScreen"]
+libraries = {
+&"": SubResource("AnimationLibrary_6p3nn")
+}
+
 [connection signal="body_entered" from="Pete/PeteArea" to="." method="_on_pete_area_body_entered"]
 [connection signal="body_exited" from="Pete/PeteArea" to="." method="_on_pete_area_body_exited"]
+[connection signal="pressed" from="MainScreen/Sprite2D/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="MainScreen/Sprite2D/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="MainScreen/Sprite2D/SettingsButton" to="." method="_on_settings_button_pressed"]
+
+[editable path="Pete"]

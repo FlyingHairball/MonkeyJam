@@ -50,7 +50,7 @@ func apply_damage():
 	hp_bar.health = hp
 	if hp == 0:
 		dead = true
-		death_rot = randf_range(-1,1)
+		death_rot = Global.rng.randf_range(-1,1)
 		set_collision_layer_value(1, false)
 		if dead_texture:
 			sprite_2d.texture = dead_texture

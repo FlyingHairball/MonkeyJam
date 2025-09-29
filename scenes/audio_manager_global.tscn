@@ -1,11 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8islo68u4v52"]
 
 [ext_resource type="Script" uid="uid://3mamw4kqpkht" path="res://scenes/audio_manager_global.gd" id="1_ays6c"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ays6c"]
+[ext_resource type="AudioStream" uid="uid://dthblaqc7sws2" path="res://assets/sound/beat3.mp3" id="2_f2n5e"]
 
 [node name="AudioManagerGlobal" type="Node2D"]
 script = ExtResource("1_ays6c")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = SubResource("AudioStreamRandomizer_ays6c")
+stream = ExtResource("2_f2n5e")
+pitch_scale = 1.35
+bus = &"Music"

@@ -7,7 +7,7 @@ func _ready() -> void:
 	hp_bar.init_health(max_hp)
 	$AnimationPlayer.play("taunt")
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if hp < max_hp:
 		$NoTouch.text = "OHHH SHIIII"
 	## Add the gravity.

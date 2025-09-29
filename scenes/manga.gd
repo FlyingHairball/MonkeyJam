@@ -11,7 +11,7 @@ const mangas = [preload("uid://chpn7smvhkop"), preload("uid://xxys8dp4j82v"), pr
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	sprite_2d.texture = mangas[randi_range(0,2)]
+	sprite_2d.texture = mangas[Global.rng.randi_range(0,2)]
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -59,6 +59,14 @@ const PETE_MUMBLE_5 = preload("uid://crqjw62v4yqt2")
 
 
 const audio_samples = {
+	"MONKEY_MADNESS_1": MONKEY_MADNESS_1,
+	"MONKEY_MADNESS_2": MONKEY_MADNESS_2,
+	"MONKEY_MADNESS_3": MONKEY_MADNESS_3,
+	"MONKEY_MADNESS_4": MONKEY_MADNESS_4,
+	"BEAT_1": BEAT_1,
+	"BEAT_2": BEAT_2,
+	"BEAT_3": BEAT_3,
+	
 	"HOLE_FALL": HOLE_FALL,
 	"PUNCH_1": PUNCH_1,
 	"PUNCH_2": PUNCH_2,
@@ -73,39 +81,33 @@ const audio_samples = {
 	"SMASH_2": SMASH_2,
 	"SMASH_3": SMASH_3,
 	"SMASH_4": SMASH_4,
-	"BEAT_1": BEAT_1,
-	"BEAT_2": BEAT_2,
-	"BEAT_3": BEAT_3,
-	"BOSS_JOEY_DOMAIN_1": BOSS_JOEY_DOMAIN_1,
-	"BOSS_JOEY_MANGA_1": BOSS_JOEY_MANGA_1,
-	"BOSS_JOEY_MANGA_2": BOSS_JOEY_MANGA_2,
-	"BOSS_JOEY_SWORD_1": BOSS_JOEY_SWORD_1,
-	"BOSS_JOEY_SWORD_2": BOSS_JOEY_SWORD_2,
-	"BOSS_JOEY_SWORD_3": BOSS_JOEY_SWORD_3,
-	"CDAWG_MUMBLE_1": CDAWG_MUMBLE_1,
-	"CDAWG_MUMBLE_2": CDAWG_MUMBLE_2,
-	"CDAWG_MUMBLE_3": CDAWG_MUMBLE_3,
-	"GARNT_MUMBLE_1": GARNT_MUMBLE_1,
-	"GARNT_MUMBLE_2": GARNT_MUMBLE_2,
-	"GARNT_MUMBLE_3": GARNT_MUMBLE_3,
-	"JOEY_MUMBLE_1": JOEY_MUMBLE_1,
-	"JOEY_MUMBLE_2": JOEY_MUMBLE_2,
-	"MONKEY_MADNESS_1": MONKEY_MADNESS_1,
-	"MONKEY_MADNESS_2": MONKEY_MADNESS_2,
-	"MONKEY_MADNESS_3": MONKEY_MADNESS_3,
-	"MONKEY_MADNESS_4": MONKEY_MADNESS_4,
 	"PAIN_1": PAIN_1,
 	"PAIN_2": PAIN_2,
 	"PAIN_3": PAIN_3,
+	"BOSS_JOEY_SWORD_1": BOSS_JOEY_SWORD_1,
+	"BOSS_JOEY_SWORD_2": BOSS_JOEY_SWORD_2,
+	"BOSS_JOEY_SWORD_3": BOSS_JOEY_SWORD_3,
+	"BOSS_JOEY_MANGA_1": BOSS_JOEY_MANGA_1,
+	"BOSS_JOEY_MANGA_2": BOSS_JOEY_MANGA_2,
+	"BOSS_JOEY_DOMAIN_1": BOSS_JOEY_DOMAIN_1,
+	
+	"CDAWG_MUMBLE_1": CDAWG_MUMBLE_1,
+	"CDAWG_MUMBLE_2": CDAWG_MUMBLE_2,
+	"CDAWG_MUMBLE_3": CDAWG_MUMBLE_3,
+	"JOEY_MUMBLE_1": JOEY_MUMBLE_1,
+	"JOEY_MUMBLE_2": JOEY_MUMBLE_2,
 	"PETE_MUMBLE_1": PETE_MUMBLE_1,
 	"PETE_MUMBLE_2": PETE_MUMBLE_2,
 	"PETE_MUMBLE_3": PETE_MUMBLE_3,
 	"PETE_MUMBLE_4": PETE_MUMBLE_4,
 	"PETE_MUMBLE_5": PETE_MUMBLE_5,
+	"GARNT_MUMBLE_1": GARNT_MUMBLE_1,
+	"GARNT_MUMBLE_2": GARNT_MUMBLE_2,
+	"GARNT_MUMBLE_3": GARNT_MUMBLE_3,
 }
 
 
-func play_audio(audio_file, attach_location: Node2D = null, volume := 1.0):
+func play_audio(audio_file, attach_location: Node = null, audio_bus: String = "Master", volume := 1.0, follow_up: String = ""):
 	if audio_samples[audio_file]:
 		var new_player = AudioStreamPlayer2D.new()
 		
@@ -114,8 +116,29 @@ func play_audio(audio_file, attach_location: Node2D = null, volume := 1.0):
 		else:
 			attach_location.add_child(new_player)
 		
-		new_player.stream = audio_samples[audio_file]
+		new_player.bus = audio_bus
 		new_player.volume_linear = volume
+		new_player.stream = audio_samples[audio_file]
 		new_player.finished.connect(new_player.queue_free)
+		new_player.add_to_group("audio")
+		
+		if audio_file.contains("MONKEY_MADNESS_"):
+			new_player.pitch_scale = Global.rng.randf_range(0.75, 0.9)
+		if audio_file.contains("BEAT_"):
+			new_player.pitch_scale = Global.rng.randf_range(0.75, 1.35)
+		if audio_file.contains("HOLE_FALL"):
+			new_player.volume_linear = 3
+		if audio_file.contains("OGA_3"):
+			new_player.volume_linear = 3
 		
 		new_player.play()
+		
+		if follow_up:
+			await new_player.finished
+			play_audio(follow_up, attach_location, audio_bus, volume)
+		elif audio_file.contains("BEAT_"):
+			await new_player.finished
+			play_audio(audio_file, attach_location, audio_bus, volume)
+
+func kill_all():
+	get_tree().get_nodes_in_group("audio").all(func(node): node.queue_free())
