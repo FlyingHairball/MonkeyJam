@@ -931,7 +931,6 @@ position = Vector2(18971, 534)
 [node name="PeteArea" type="Area2D" parent="Pete"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pete/PeteArea"]
-visible = false
 shape = SubResource("RectangleShape2D_01n6w")
 
 [node name="PeteTextBox" parent="." instance=ExtResource("14_r6p65")]
