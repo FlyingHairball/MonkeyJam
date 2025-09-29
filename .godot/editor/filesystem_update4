@@ -1,8 +1,0 @@
-res://scenes/global.gd
-res://scenes/settings_panel.gd
-res://scenes/player.tscn
-res://assets/speed_lines.gdshader
-res://assets/secret.gdshader
-res://assets/text_curve.gdshader
-res://assets/TextPanel.tres
-res://scenes/main_scene.tscn
